@@ -34,4 +34,9 @@ Usage
     ...
     My first songbook
 
+API methods
+------------
+
+* ``Guitarparty``.`get_songbooks`
+
 More detailed information about the API can be found on the [Guitarparty.com website](http://www.guitarparty.com/developers/api-docs/) 
