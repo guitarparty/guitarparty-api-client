@@ -23,6 +23,7 @@ def deserialize(raw_data):
         return data
 
 
+
 class Guitarparty(object):
     def __init__(self, api_key=None, host=None):
         _globals = globals()
@@ -32,30 +33,43 @@ class Guitarparty(object):
         self.url = '%s%s' % (self.host, self.api_endpoint)
 
     def get_songbooks(self):
-        url = '%s/songbooks/?api_key=%s' % (self.url, self.api_key)
-        r = requests.get(url)
+        url = '%s/songbooks/' % (self.url)
+        r = self.make_request('get', url)
         return deserialize(r.content)
 
     def get_songbook(self, uri):
-        url = '%s%s?api_key=%s' % (self.host, uri, self.api_key)
-        r = requests.get(url)
+        url = '%s%s' % (self.host, uri)
+        r = self.make_request('get', url)
         return deserialize(r.content)
 
     def create_songbook(self, title, description=None, is_public=False):
-        url = '%s/songbooks/?api_key=%s' % (self.url, self.api_key)
+        url = '%s/songbooks/' % (self.url)
         data = {
             'title': title,
             'description': description,
             'is_public': is_public,
         }
-        r = requests.post(url, data=json.dumps(data))
+        r = self.make_request('post', url, data=json.dumps(data))
+        return deserialize(r.content)
+
+    def get_songbook_songs(self, sb_uri):
+        url = '%s%ssongs/' % (self.host, sb_uri)
+        r = self.make_request('get', url)
+        return deserialize(r.content)
+
+    def get_songbook_songitem(self, uri):
+        url = '%s%s' % (self.host, uri)
+        r = self.make_request('get', url)
         return deserialize(r.content)
 
     def delete_songbook(self, uri):
-        url = '%s%s?api_key=%s' % (self.host, uri, self.api_key)
-        r = requests.delete(url)
+        url = '%s%s' % (self.host, uri)
+        r = self.make_request('delete', url)
         if r.status_code == 204:
             return True
         return False
+
+    def make_request(self, method, uri, **kwargs):
+        return requests.request(method, uri + '?api_key=' + self.api_key, **kwargs)
 
 
