@@ -1,8 +1,9 @@
 from setuptools import setup
+import guitarparty
 
 setup(
     name='guitarparty',
-    version='0.1',
+    version=guitarparty.VERSION,
     description='A Python library for interfacing with the guitarparty.com API',
     author='Guitarparty.com',
     author_email='support@guitarparty.com',
